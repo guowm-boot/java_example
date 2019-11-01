@@ -1,5 +1,7 @@
 package com.solaris.javatest;
 
+import jdk.nashorn.internal.ir.annotations.Immutable;
+
 import java.util.*;
 
 
@@ -24,6 +26,7 @@ public class MyCollection {
     public static void main(String[] args) {
 
         testConcurrent();
+
 
         List<String> strList=new ArrayList<>();
         strList.add("1");
@@ -54,6 +57,7 @@ public class MyCollection {
         strIntMap.merge("solaris",32,Integer::sum);
         strIntMap.merge("ken",35,Integer::sum);
         System.out.println("#map 合并结果"+strIntMap);
+        employeeMap.forEach((k,v)-> System.out.println(k));
 
 
         System.out.println("#map->key: set:"+strIntMap.keySet());
