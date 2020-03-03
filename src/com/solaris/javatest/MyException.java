@@ -34,6 +34,7 @@ public class MyException {
 
         //autoClose测试 try-with-resource
         testTryWithResource();
+
     }
 
     public static void testTryWithResource() {

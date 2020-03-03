@@ -2,6 +2,7 @@ package com.solaris.javatest;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.BiFunction;
@@ -10,6 +11,14 @@ public class MyLambda {
 
     public static void main(String[] args) {
         try {
+
+            for (int i = 0; i < 10; i++) {
+                MyLambda tmp1=new MyLambda();
+                final int index=i;
+                testSpeed(MyLambda::lambdaTest);
+                //testSpeed(tmp1::lambdaTest1);
+            }
+
             Comparator<String> comp =
                     (f, s) ->
                             f.length() - s.length();
@@ -39,4 +48,15 @@ public class MyLambda {
         System.out.println("performed");
         throw new RuntimeException("aaa");
     }
+
+    static void lambdaTest(){
+    }
+
+    void lambdaTest1(){
+    }
+
+    static void testSpeed(Runnable x) {
+        System.out.println("x:" + x);
+    }
 }
+

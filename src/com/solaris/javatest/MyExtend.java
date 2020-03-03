@@ -26,4 +26,6 @@ public class MyExtend {
         System.out.println();
     }
 
+    void test() {
+    }
 }

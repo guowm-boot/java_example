@@ -1,8 +1,9 @@
 package com.solaris.javatest;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
-public class MyOptional {
+public class MyOptional{
     public static void main(String[] args) {
         create();
         get();
@@ -19,6 +20,7 @@ public class MyOptional {
         Optional<String> emptyOpt = Optional.empty();
         Optional<String> strOpt = Optional.of("1");
         try {
+            strOpt = Optional.of(null);//抛出异常
             strOpt = Optional.of(null);//抛出异常
         } catch (Exception e) {
         }

@@ -1,5 +1,7 @@
 package com.solaris.javatest;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.concurrent.*;
 /*
     消息队列/阻塞队列

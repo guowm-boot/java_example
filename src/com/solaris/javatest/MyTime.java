@@ -2,11 +2,14 @@ package com.solaris.javatest;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Locale;
 
 import static java.time.temporal.ChronoField.DAY_OF_MONTH;
-import static java.time.temporal.TemporalAdjusters.*;
 
 /*
     时间的解决方案
@@ -24,21 +27,48 @@ public class MyTime {
     }
 
     public static void testTimeZone() {
+        System.out.print("\n---testDuration begin---\n");
+        System.out.println(ZoneId.getAvailableZoneIds());//所有时区ID
+
         //东九区
-        ZoneId d9= ZoneId.of("+09:00");
-        ZoneId d8= ZoneId.of("+08:00");
+        ZoneId d9 = ZoneId.of("+09:00");
+        d9 = ZoneId.of("Asia/Shanghai");
+        String d9ID = d9.getId();
+        ZoneId d8 = ZoneId.of("+08:00");
 
         //LocalDateTime是不包含任何时区的时间
-        LocalDateTime localDateTime=LocalDateTime.now();
-        LocalDateTime d9Time= LocalDateTime.ofInstant(localDateTime.atZone(d8).toInstant(),d9);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime d9Time = LocalDateTime.ofInstant(localDateTime.atZone(d8).toInstant(), d9);
     }
+
     public static void testDateTimeFormatter() {
-        System.out.println("---testDateTimeFormatter begin---");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-        String actualTimeStart = "2017/04/07 08:00";
+        System.out.print("\n---testDateTimeFormatter begin---\n");
+
+        LocalDateTime ldt = LocalDateTime.now();
+        //1、标准格式
+        System.out.println("BASIC_ISO_DATE:" + DateTimeFormatter.BASIC_ISO_DATE.format(ldt));//20191211
+        System.out.println("ISO_DATE_TIME:" + DateTimeFormatter.ISO_DATE_TIME.format(ldt));//2019-12-11T17:18:30.581
+        System.out.println("ISO_LOCAL_DATE_TIME:" + DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(ldt));//2019-12-11T17:18:30.581
+
+        //2、本地格式
+        DateTimeFormatter formatterLocal = DateTimeFormatter
+                .ofLocalizedDateTime(FormatStyle.MEDIUM)
+                .withLocale(Locale.CHINA);//可选
+        System.out.println("MEDIUM:" + formatterLocal.format(ldt));
+        // SHORT:  19-12-11 下午4:32
+        // MEDIUM: 2019-12-11 16:33:13 ★★
+        // LONG:  2019年12月11日 下午04时31分23秒
+
+        //3、自定义格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        String actualTimeStart = "2017/04/07 08:00:30";
         LocalDateTime timeStart = LocalDateTime.parse(actualTimeStart, formatter);
         System.out.println(timeStart.format(formatter));
-        System.out.println();
+
+        //4、枚举星期几
+        for (DayOfWeek w : DayOfWeek.values())
+            System.out.print(w.getDisplayName(TextStyle.SHORT, Locale.CHINA)
+                    + " ");//星期一 星期二 星期三 星期四 星期五 星期六 星期日
     }
 
     //Duratio-描述时长,记录了相对秒数
@@ -72,23 +102,24 @@ public class MyTime {
 
     public static void localDateTime() {
         System.out.println("---localDateTime begin---");
-        LocalDateTime dateTime = LocalDateTime.of(2019, 10, 30, 11, 30, 50);
-        dateTime = LocalDateTime.now();
+        LocalDateTime dateTimeOLd = LocalDateTime.of(2019, 10, 30, 11, 30, 50);
+        LocalDateTime dateTime = LocalDateTime.now();
         LocalDate d = LocalDate.now();
         LocalTime t = LocalTime.now();
+        System.out.println("util:" + dateTimeOLd.until(LocalDateTime.now(), ChronoUnit.MONTHS));
         dateTime = LocalDateTime.of(d, t);
         dateTime = d.atTime(10, 30);
         dateTime = t.atDate(d);
         d = dateTime.toLocalDate();
         t = dateTime.toLocalTime();
         dateTime = dateTime.plusHours(20);
-        dateTime=LocalDateTime.now().plusMinutes(1);
-        dateTime= dateTime.with(TemporalAdjusters.next(DayOfWeek.of(7)));
+        dateTime = LocalDateTime.now().plusMinutes(1);
+        dateTime = dateTime.with(TemporalAdjusters.next(DayOfWeek.of(7)));
         System.out.println(dateTime);
         System.out.println("---localDateTime end---");
     }
 
-    public  static  TemporalAdjuster test1(){
+    public static TemporalAdjuster test1() {
         return (temporal) -> temporal.with(DAY_OF_MONTH, 1);
     }
 
